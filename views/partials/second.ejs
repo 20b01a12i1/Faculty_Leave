@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+  <body>
+    <!-- <h3>Leave Details</h3> -->
+    <table border="1">
+      <tr>
+        <th>Date</th>
+        <th>Class</th>
+        <th>Hour</th>
+        <th>Faculty</th>
+      </tr>
+    
+    <% 
+    data.forEach((i)=>{ %>
+      <tr>
+        <td><%= i.Date%></td>
+        <td><%= i.class %></td>
+        <td><%= i.hour%></td>
+        <td><%= i.adjusted%></td>
+      </tr>
+      <% 
+    })
+    %>
+  </table>
+
+  </body>
+</html>
