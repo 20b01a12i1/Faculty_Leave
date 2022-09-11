@@ -7,7 +7,7 @@
       integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
       crossorigin="anonymous"
     />
-    <link rel='stylesheet' href='./stylesheets/style.css' />
+    
   </head>
   <body>
     <header>
@@ -15,9 +15,36 @@
     </header>
     <main>
           <%- include('./partials/dashboardf'); %>
-          <div style="background-color:rgb(142, 135, 135);opacity:1;height: 50px;width:450px;margin-left:250px;margin-top: 50px;padding-left: 10px;">
+          <div style="width:600px;margin-left:350px;margin-top: 50px;padding-left: 10px;">
             
-         <h2 type="success">Your leave status is <%=msg.status%></h2><br>
+            <table border="3">
+              <tr>
+                <th style="width:90px">lid</th>
+                <th style="width:120px">From-date</th>
+                <th style="width:120px">To-date</th>
+                <th style="width:120px">Status</th>
+                <th style="width:120px">More</th>
+              </tr>
+            
+            <% 
+            msg.forEach((i)=>{ %>
+              <tr>
+                <td ><%= i.lid%></td>
+                <td><%= i.fromdate %></td>
+                <td><%= i.todate%></td>
+                <td><%= i.status%></td>
+                <%
+                var url2="http://localhost:3000/users/facultyreport/"+i.lid;
+                %>
+                
+                <td><a href="<%=url2%>" target="_blank">Download CL</a></td>
+              
+              </tr>
+              <% 
+            })
+            %>
+          </table>
+        
           </div>
           
     </main>

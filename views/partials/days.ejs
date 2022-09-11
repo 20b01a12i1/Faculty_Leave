@@ -14,23 +14,24 @@
   </head>
   <body>
 <%
-var url="/users/leavesinsert/"+fid;
+var url="/users/leavesinsert";
 %>
-    <div class="card" style="width:450px;padding:20px; margin-left:550px;margin-top: 160px;">
+    <div class="card" style="width:450px;padding:20px; margin-left:550px;margin-top: 50px;">
       <div class="d-flex justify-content-center">
         <form class="row g-3 needs-validation" action='<%=url%>' method="post">
           <label for="validationTooltipUsername" class="form-label"
             >From Date</label
           >
           <input type="date" name="from"/>
-          <label for="validationTooltip03" class="form-label">To Date</label>
+          <label for="validationTooltip03" class="form-label" >To Date</label>
           <input
             type="date"
             name="todate" 
           />
-          <input type="number" name="nodays">
+          <input type="textfield" name="purpose" placeholder="Purpose" required>
+          <input type="text" name="address" placeholder="Leave Address" required>
           <div class="col-12">
-            <button class="btn btn-primary" type="submit">Submit form</button>
+            <button class="btn btn-primary" type="submit">Submit</button>
           </div>
         </form>
       </div>

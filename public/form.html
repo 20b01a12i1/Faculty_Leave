@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script type="text/javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.3.1.min.js"> </script>
+    <script type="text/javascript">
+        function PrintElem(elem) {
+            Popup($(elem).html());
+        }
+
+        function Popup(data) {
+            var myWindow = window.open('', 'my div', 'height=400,width=600');
+            myWindow.document.write('<html><head><title>my div</title>');
+            // myWindow.document.write('<link rel="stylesheet" href="./stylesheets/form.css" type="text/css" />');
+            myWindow.document.write('</head><body >');
+            myWindow.document.write(data);
+            myWindow.document.write('</body></html>');
+            // myWindow.document.close(); // necessary for IE >= 10
+
+            
+            //     myWindow.focus(); // necessary for IE >= 10
+                myWindow.print();
+                myWindow.close();
+            };
+    </script>
+    <style>
+      table,
+      th,
+      td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        padding: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="content">
+      
+
+      <table style="width: 100%;">
+        <tr>
+          <td colspan="4">Name :</td>
+          <td rowspan="4"> Leave Address :<br/><br/><br/><br/><br/><br/><br/></td>
+        </tr>
+        <tr>
+          <td colspan="4">Designation :</td>
+        </tr>
+        <tr>
+          <td colspan="4">Department :</td>
+        </tr>
+        <tr>
+          <td rowspan="2">Period of Leave</td>
+          <td> From</td>
+          <td>To</td>
+          <td>Days</td>
+        </tr>
+        <tr>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+          <td>Phone no :</td>
+        </tr>
+        <tr>
+          <td colspan="6">Purpose :</td>
+        </tr>
+        <tr>
+          <td>Work Adjustment :</td>
+          <td>Name</td>
+          <td>Date</td>
+          <td>Period</td>
+          <td>Signature</td>
+        </tr>
+        <tr>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+        </tr>
+        <tr>
+          <td>No.of Days</td>
+          <td>EL</td>
+          <td>SL</td>
+          <td>CL</td>
+          <td colspan="3">Recommended/ Not Recommended</td>
+        </tr>
+        <tr>
+          <td>Leave at credit</td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+          <td colspan="3">Dept.Head</td>
+        </tr>
+        <tr>
+          <td>Balance</td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+          <td colspan="2">PRINCIPAL :</td>
+        </tr>
+      </table>
+    </div>
+    <button onclick="PrintElem('#content')">Download</button>
+    
+  </body>
+</html>

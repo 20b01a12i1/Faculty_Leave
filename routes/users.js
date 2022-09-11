@@ -30,38 +30,50 @@ router.post("/check", function (req, res, next) {
     // console.log(result[0].password)
     if (pass == result[0].password) {
       if (result[0].designation == "HOD") {
+        res.cookie("username",fid)
         res.render("hod");
       } else {
-        res.render("page1", { fid: req.body.username });
+        res.cookie("username",fid)
+        res.render("page1", { fid: req.body.username,msg1:"",msg2:"" });
       }
     } else {
-      res.render("index");
+      return res.redirect('/login?msg=fail')
     }
   });
 });
 
-router.get("/page2/:fid", (req, res) => {
-  const fid = req.params.fid;
+router.get('/hod',(req,res)=>{
+  res.render("hod")
+})
+router.get('/page1',(req,res)=>{
+  res.render("page1",{msg1:"",msg2:""})
+})
+router.get("/page2", (req, res) => {
+  const fid = req.cookies.username;
   console.log(fid);
   res.render("page2", { fid: fid });
 });
 
-router.post("/data/:fid/:lid", function (req, res, next) {
+router.post("/data", function (req, res, next) {
   const name = req.body.name;
   const class1 = req.body.class1;
-  const hour = req.body.hour;
+  const period = req.body.hour;
   const adjusted = req.body.adj;
-  var fid = req.params.fid;
-  var lid = req.params.lid;
+  const branch=req.body.branch;
+  const section =req.body.section;
+  var lid = req.cookies.lid;
+  var fid = req.cookies.username;
+  const dt=new Date().toLocaleDateString()
   var count = req.body.testing;
   console.log(req.body);
+  console.log(lid)
   console.log(Object.keys(req.body).length);
   console.log(name)
-  console.log(name.length)
-  if (Object.keys(req.body).length == 5) {
+  // console.log(name.length)
+  if (Object.keys(req.body).length == 7) {
     var aid = Math.floor(Math.random() * 100001) + "";
-    const sql = "insert into adjustment values(?,?,?,?,?,?)";
-    db.query(sql, [aid, lid, name, class1, hour, adjusted], (err) => {
+    const sql = "insert into adjustment values(?,?,?,?,?,?,?,?,?)";
+    db.query(sql, [aid, lid, name, class1, period, adjusted,branch,section,dt], (err) => {
       if (err) {
         console.log(err);
       } else {
@@ -72,31 +84,36 @@ router.post("/data/:fid/:lid", function (req, res, next) {
   else {
     for (let i = 0; i < name.length; i++) {
       var aid = Math.floor(Math.random() * 100001) + "";
-      const sql = "insert into adjustment values(?,?,?,?,?,?)";
+      const sql = "insert into adjustment values(?,?,?,?,?,?,?,?,?)";
       db.query(
         sql,
-        [aid, lid, name[i], class1[i], hour[i], adjusted[i]],
+        [aid, lid, name[i], class1[i], period[i], adjusted[i],branch[i],section[i],dt],
         (err) => {
           if (err) {
             console.log(err);
           } else {
             console.log("Inserted!!!");
+            
           }
         }
       );
     }
   }
+  res.render("page1",{msg1:"Your Leave Application is Submitted!!",msg2:"Please wait for the response!!!"})
+
 });
-router.post("/leavesinsert/:fid", function (req, res, next) {
+router.post("/leavesinsert", function (req, res, next) {
   const fromdate = req.body.from;
   const todate = req.body.todate;
-  const days = req.body.nodays;
-  var fid = req.params.fid;
+  const purpose=req.body.purpose;
+  const address=req.body.address;
+  var fid = req.cookies.username;
   var lid = Math.floor(Math.random() * 100001) + "";
+  res.cookie("lid",lid)
   var status = "pending";
   const sql =
-    "insert into leave1 (lid,fid,fromdate,todate,total,status) values (?,?,?,?,?,?)";
-  db.query(sql, [lid, fid, fromdate, todate, days, status], (err, result) => {
+    "insert into leave1 (lid,fid,fromdate,todate,status,purpose,address) values (?,?,?,?,?,?,?)";
+  db.query(sql, [lid, fid, fromdate, todate,status,purpose,address], (err, result) => {
     if (err) {
       console.log(err);
     } else {
@@ -108,53 +125,74 @@ router.post("/leavesinsert/:fid", function (req, res, next) {
 });
 
 router.get("/display", (req, res) => {
-  const que = `select * from leave1 where status="pending"`;
+  const que = `select lid,fid,DATE_FORMAT(fromdate,'%d-%m-%Y') as fromdate,DATE_FORMAT(todate,'%d-%m-%Y') as todate,DATEDIFF( todate,fromdate) as total,purpose,address from leave1  where status="pending"`;
   db.query(que, (err, result) => {
     if (err) {
       console.log(err);
     } else {
-      console.log(result);
-      res.render("hod1", { data: result });
+      console.log(result.length);
+      res.render("hod1", { data: result,len:result.length });
     }
   });
 });
+router.get("/totalreport", (req, res) => {
+  const search=req.query.start
+  console.log(search)
+  const que = `select fid,sum(DATEDIFF( todate,fromdate)) as totalnoofdays from leave1 where status="Accepted" group by(fid) `;
+  db.query(que, [search],(err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(result);
+      res.render("totalreport", { data: result });
+    }
+  });
+})
 
 router.get("/report", (req, res) => {
-  const que = `select fid,sum(total) noofdays from leave1 where status="Accepted" group by(fid) `;
+  res.render('report')
+});
 
-  db.query(que, (err, result) => {
+router.post("/monthreport", (req, res) => {
+  const search=req.body.start
+  console.log(search)
+  const que = `select fid,sum(DATEDIFF( todate,fromdate)) as totalnoofdays from leave1 where date_format(fromdate,'%Y-%m')=(?) and status="Accepted" group by(fid) `;
+  db.query(que, [search],(err, result) => {
     if (err) {
       console.log(err);
     } else {
       console.log(result);
-      res.render("report", { data: result });
+      res.render("datatable", { data: result,len:result.length });
     }
   });
 });
 
-router.get("/status/:fid", (req, res) => {
-  var fid = req.params.fid;
-  const sql1 = `select * from leave1 where fid=? order by fromdate desc`;
+router.get("/status", (req, res) => {
+  var fid = req.cookies.username;
+  console.log(fid)
+  const sql1 = `select lid,DATE_FORMAT(fromdate,'%d-%m-%Y') as fromdate,DATE_FORMAT(todate,'%d-%m-%Y') as todate,status,purpose,address from leave1 where fid=? order by fromdate desc limit 3`;
   db.query(sql1, [fid], (err, result) => {
     if (err) {
       console.log(err);
     } else {
-      console.log(result[0]);
-      res.render("status", { fid: fid, msg: result[0] });
+      console.log(result);
+      console.log(fid)
+      res.render("status", { fid: fid, msg: result,msg1:"",msg2:"" });
     }
   });
 });
 
 
-router.get("/updatestatus/:fid", (req, res) => {
-  const fid = req.params.fid;
+router.get("/updatestatus/:lid", (req, res) => {
+  const lid = req.params.lid;
   const status = req.query.status;
-  const sql = `UPDATE leave1 SET status = ? WHERE fid=? and status="pending"`;
-  db.query(sql, [status, fid], (err, result) => {
+  const sql = `UPDATE leave1 SET status = ? WHERE lid=? and status="pending"`;
+  db.query(sql, [status, lid], (err, result) => {
     if (err) {
       console.log(err);
     } else {
       console.log("result");
+      res.redirect("/users/display")
     }
   });
 });
@@ -168,6 +206,22 @@ router.get("/adjustment/:lid", (req, res) => {
       res.render("hod2", { data: result, title: "Data" });
     }
   });
+});
+
+router.get("/facultyreport/:lid", (req, res) => {
+  const lid=req.params.lid;
+  const fid=req.cookies.username;
+  console.log(fid)
+  const sql=`SELECT f.fname,f.dept,f.designation,f.phoneno,DATEDIFF( todate,fromdate) as days,l.fromdate,l.todate,l.purpose,l.address,a.adjusted,a.cdate,a.period,a.branch,a.class,a.applieddate FROM leave1 l,faculty f,adjustment a where l.lid=? and a.lid=? and f.fid=?`
+  db.query(sql,[lid,lid,fid],(err,result)=>{
+    if(err){
+      console.log(err)
+    }
+    else{
+      res.render('form',{data:result});
+    }
+  })
+
 });
 
 module.exports = router;

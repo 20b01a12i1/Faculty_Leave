@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+    <script>
+      window.onload = function () {
+    document.getElementById("download")
+        .addEventListener("click", () => {
+            const content = this.document.getElementById("content");
+            console.log(content);
+            console.log(window);
+            var opt = {
+                margin: 0.3,
+                filename: 'leaveform.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().from(content).set(opt).save();
+        })
+}
+    </script>
+  </head>
+  <style>
+    table,
+    th,
+    td {
+      border: 1.5px solid black;
+      border-collapse: collapse;
+      padding: 10px;
+    }
+  </style>
+  <body>
+    <div style="margin-left:950px">
+      <button id="download">Download</button>
+    </div>
+    
+    <div id="content">
+      <h3>
+        <center>SHRI VISHNU ENGINEERING COLLEGE FOR WOMEN::BHIMAVARAM</center>
+        <center><italic>(AUTONOMOUS)</italic></center>
+        <center>
+          <p><u>LEAVE APPLICATION</u></p>
+        </center>
+        <h4 align="right" style="margin-right: 120px">Date: <%=data[0].applieddate%></h4>
+      </h3>
+
+      <table style="width: 95%" align="center">
+        <tr>
+          <td colspan="4"><b>Name : </b><%=data[0].fname%></td>
+          <td rowspan="4">
+            <b>Leave Address : </b
+            ><%=data[0].address%><br /><br /><br /><br /><br />
+          </td>
+        </tr>
+        <tr>
+          <td colspan="4"><b>Designation : </b> <%=data[0].designation%></td>
+        </tr>
+        <tr>
+          <td colspan="4"><b>Department : </b> <%=data[0].dept%></td>
+        </tr>
+        <tr>
+          <td rowspan="2"><b>Period of Leave</b></td>
+          <td><b>From</b></td>
+          <td><b>To</b></td>
+          <td><b>Days</b></td>
+        </tr>
+        <tr>
+          <td><%=data[0].fromdate%></td>
+          <td><%=data[0].todate%></td>
+          <td><%=data[0].days%></td>
+          <td><b>Phone no : </b><%=data[0].phoneno%></td>
+        </tr>
+        <tr>
+          <td colspan="6"><b>Purpose : </b><%=data[0].purpose%></td>
+        </tr>
+        <tr>
+          <td style="border: white"><b>Work Adjustment :</b></td>
+          <td style="border: white"><b>Name</b></td>
+          <td style="border: white"><b>Date</b></td>
+          <td style="border: white"><b>Period</b></td>
+          <td style="border: white"><b>Signature</b></td>
+        </tr>
+
+        <%data.forEach((i)=>{%>
+        <tr style="border: white">
+          <td style="border: white">* <%=i.branch%>(<%=i.class%>)</td>
+          <td style="border: white"><%=i.adjusted%></td>
+          <td style="border: white"><%=i.cdate%></td>
+          <td style="border: white"><%=i.period%></td>
+          <td style="border: white"></td>
+        </tr>
+        <% }) %>
+        <tr style="border: white">
+          <td style="border: white"></td>
+          <td style="border: white"></td>
+          <td style="border: white"></td>
+          <td style="border: white"></td>
+          <td style="border: white"><b>Signature of the employee </b></td>
+        </tr>
+        <tr>
+          <td><b>No.of Days</b></td>
+          <td><b>EL</b></td>
+          <td><b> SL</b></td>
+          <td><b> CL</b></td>
+          <td colspan="3"><b> Recommended/ Not Recommended</b></td>
+        </tr>
+        <tr>
+          <td><b> Leave at credit</b></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td colspan="3"><b>Dept.Head</b></td>
+        </tr>
+        <tr>
+          <td><b> Balance</b></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td colspan="2"><b>PRINCIPAL :</b></td>
+        </tr>
+      </table>
+    </div>
+    
+  </body>
+</html>

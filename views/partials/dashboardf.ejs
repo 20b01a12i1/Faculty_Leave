@@ -40,15 +40,25 @@ li a:active{
 <body>
 <ul>
 <%
-var url="/users/page2/"+fid;
+var url="/users/page2";
 %>
 
-<% var url1="/users/status/"+fid%>
+<% var url1="/users/status"
+   var url2="/logout"
+%>
 
   <li><a class="active" href='<%=url%>'>Apply Leave</a></li>
   <li><a class="active" href='<%=url1%>'>Status</a></li>
+  <li><a class="active" href='<%=url2%>'>Log Out</a></li>
 </ul>
+<%if(msg1.length!=0){%>
+  <div style="margin-top: 150px;" align="center">
+    <div class="card" align="center" style="width: 450px;height:150px;padding-top: 40px;color: rgb(78, 29, 29);font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">
+      <b><%=msg1%></b> <br>
+     <b><%=msg2%></b> 
+    </div>
+  </div>
+<%}%>
 
-</form>
 </body>
 </html>

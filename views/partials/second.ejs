@@ -8,16 +8,21 @@
       <tr>
         <th>Date</th>
         <th>Class</th>
+        <th>Branch</th>
+        <th>Section</th>
         <th>Hour</th>
         <th>Faculty</th>
+
       </tr>
     
     <% 
     data.forEach((i)=>{ %>
       <tr>
-        <td><%= i.Date%></td>
+        <td><%= i.cdate%></td>
         <td><%= i.class %></td>
-        <td><%= i.hour%></td>
+        <td><%= i.branch%></td>
+        <td><%= i.section%></td>
+        <td><%= i.period%></td>
         <td><%= i.adjusted%></td>
       </tr>
       <% 
