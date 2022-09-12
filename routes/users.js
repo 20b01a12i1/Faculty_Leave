@@ -25,12 +25,14 @@ db.getConnection((err) => {
 router.post("/check", function (req, res, next) {
   const fid = req.body.username;
   const pass = req.body.password;
-  const sql = "select password,designation from faculty where fid=?";
+  const sql = "select password,designation,dept from faculty where fid=?";
   db.query(sql, [fid], (err, result) => {
     // console.log(result[0].password)
     if (pass == result[0].password) {
       if (result[0].designation == "HOD") {
         res.cookie("username",fid)
+        res.cookie("dept",result[0].dept)
+        // console.log(result[0].dept)
         res.render("hod");
       } else {
         res.cookie("username",fid)
@@ -125,8 +127,10 @@ router.post("/leavesinsert", function (req, res, next) {
 });
 
 router.get("/display", (req, res) => {
-  const que = `select lid,fid,DATE_FORMAT(fromdate,'%d-%m-%Y') as fromdate,DATE_FORMAT(todate,'%d-%m-%Y') as todate,DATEDIFF( todate,fromdate) as total,purpose,address from leave1  where status="pending"`;
-  db.query(que, (err, result) => {
+  const dept1=req.cookies.dept;
+  console.log(dept1)
+  const que = `select l.lid,l.fid,DATE_FORMAT(l.fromdate,'%d-%m-%Y') as fromdate,DATE_FORMAT(l.todate,'%d-%m-%Y') as todate,DATEDIFF( l.todate,l.fromdate) as total,l.purpose,l.address from leave1 l,faculty f  where status="pending" and f.fid=l.fid and f.dept=?`;
+  db.query(que,[dept1], (err, result) => {
     if (err) {
       console.log(err);
     } else {
@@ -198,7 +202,7 @@ router.get("/updatestatus/:lid", (req, res) => {
 });
 router.get("/adjustment/:lid", (req, res) => {
   const lid = req.params.lid;
-  const sql = `select * from adjustment where lid=?`;
+  const sql = `select lid,aid,DATE_FORMAT(cdate,'%d-%m-%Y') as cdate,class,period,adjusted,branch,section from adjustment where lid=?`;
   db.query(sql, [lid], (err, result) => {
     if (err) {
       console.log(err);

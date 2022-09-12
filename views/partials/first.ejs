@@ -32,12 +32,12 @@
             <% if(len!=0){%>
               <table style="margin-left: 30px;">
                 <tr>
-                    <th>User</th>
-                    <th style="padding-left: 10px;">From Date</th>
-                    <th style="padding-left: 20px;">To Date</th>
+                    <th style="padding-left: 10px;">User</th>
+                    <th style="padding-left: 25px;padding-right: 25px;">From Date</th>
+                    <th style="padding-left: 25px;padding-right: 25px;">To Date</th>
                     <th>No.of days</th>
                     <th colspan="2" style="padding-left: 30px;">Purpose</th>
-                    <th>Leave Address</th>
+                    <th style="padding-left: 25px;">Leave Address</th>
                     <th style="border: white;padding-left: 30px;">More</th>
                 </tr>
                 
@@ -45,8 +45,8 @@
             data.forEach((i)=>{ %>
               <tr>   
                   <td><%= i.fid %></td>
-                  <td><h4 style="color: white;">jsgdskhj</h4><%= i.fromdate %></td>
-                  <td><h4 style="color: white;">jsgdskhj</h4><%= i.todate %></td>
+                  <td ><%= i.fromdate %></td>
+                  <td><%= i.todate %></td>
                   <td><%= i.total %></td>
                   <td colspan="2"><div class="divScroll">
                     <%= i.purpose%>
@@ -71,7 +71,7 @@
         </form>
       </div>
       <div class="flex-child magenta" style="width: 20%;">
-        <iframe name="second" style="height:500px;width: 505px;margin-top: 120px;"></iframe>
+        <iframe name="second" style="width: 505px;margin-top: 120px;"></iframe>
       </div>
     </div>
   </body>

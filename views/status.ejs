@@ -36,18 +36,15 @@
                 <%
                 var url2="http://localhost:3000/users/facultyreport/"+i.lid;
                 %>
-                
-                <td><a href="<%=url2%>" target="_blank">Download CL</a></td>
-              
+                <%if(i.status=="Accepted"){%>
+                  <td><a href="<%=url2%>" target="_blank">Download CL</a></td>
+                <%}%>
               </tr>
               <% 
             })
             %>
-          </table>
-        
-          </div>
-          
-    </main>
-    
+          </table>        
+          </div>         
+    </main>  
   </body>
 </html>
